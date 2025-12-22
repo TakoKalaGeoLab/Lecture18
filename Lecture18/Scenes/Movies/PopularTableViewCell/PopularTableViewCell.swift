@@ -27,8 +27,8 @@ class PopularTableViewCell: UITableViewCell {
         collectionView.dataSource = self
         
         collectionView.register(
-            UINib(nibName: "TopRatedCollectionViewCell", bundle: nil),
-            forCellWithReuseIdentifier: "TopRatedCollectionViewCell"
+            UINib(nibName: "ImageCollectionViewCell", bundle: nil),
+            forCellWithReuseIdentifier: "ImageCollectionViewCell"
         )
     }
 }
@@ -39,7 +39,7 @@ extension PopularTableViewCell: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TopRatedCollectionViewCell", for: indexPath) as! TopRatedCollectionViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ImageCollectionViewCell", for: indexPath) as! ImageCollectionViewCell
         cell.configure(with: movies[indexPath.row])
         return cell
     }
