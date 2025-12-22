@@ -17,6 +17,11 @@ class MoviesListViewController: UIViewController {
             tableView.reloadData()
         }
     }
+    private var topRatedMovies: [Movie] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +38,11 @@ class MoviesListViewController: UIViewController {
             UINib(nibName: "UpcomingTableViewCell", bundle: nil),
             forCellReuseIdentifier: "UpcomingTableViewCell"
         )
+        
+        tableView.register(
+            UINib(nibName: "TopRatedTableViewCell", bundle: nil),
+            forCellReuseIdentifier: "TopRatedTableViewCell"
+        )
     }
 
     private func fetchMovies() {
@@ -47,18 +57,32 @@ class MoviesListViewController: UIViewController {
                 print(error)
             }
         }
+        
+        movieApiManager?.fetchMovies(with: .topRated) { result in
+            switch result {
+            case .success(let movieResponse):
+                self.topRatedMovies = movieResponse.movies
+                print(movieResponse.movies)
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
 }
 
 extension MoviesListViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        1
+        2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "UpcomingTableViewCell", for: indexPath) as! UpcomingTableViewCell
             cell.movies = upcomingMovies
+            return cell
+        } else if indexPath.row == 1 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "TopRatedTableViewCell", for: indexPath) as! TopRatedTableViewCell
+            cell.movies = topRatedMovies
             return cell
         }
         return UITableViewCell()
